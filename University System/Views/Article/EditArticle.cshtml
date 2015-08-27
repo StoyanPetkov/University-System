@@ -1,0 +1,40 @@
+﻿@model University_System.ViewModels.ArticleViewModel.ArticleControllerArticlesVM
+
+@{
+    ViewBag.Title = "EditArticle";
+}
+
+<h2>Articles</h2>
+
+@using (Html.BeginForm("EditArticle", "Article", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.ArticleId)
+    @Html.HiddenFor(model => model.DateCreated)
+    @Html.HiddenFor(model => model.TeacherID)
+    <table>
+        <tr>
+            <td style="width:150px; float:left">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @placeholder = "Title" })
+                @Html.ValidationMessageFor(model => model.Title)
+            </td>
+            <td style="width:200px; float:right; margin-left:25px;">
+                @Html.DropDownListFor(m => m.SubjectID, Model.SubjectsListItems, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SubjectID)
+            </td>
+        </tr>
+    </table>
+    <div id="txtArea" style=" margin-top:20px;">
+        @Html.TextAreaFor(model => model.Content, new { @class = "form-control", @placeholder = "Input content here", style = "width: 520px; height:200px;" })
+        @Html.ValidationMessageFor(model => model.Content)
+    </div>
+    <input type="submit" value="Save" class="btn" />
+    
+}
+<br />
+<table>
+    <tr>
+        <td>
+            @Html.ActionLink("Back", "Articles", "Article")
+        </td>
+    </tr>
+</table>

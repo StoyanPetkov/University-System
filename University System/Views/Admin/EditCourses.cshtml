@@ -1,0 +1,83 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseVM
+
+@{
+    ViewBag.Title = "EditCourses";
+}
+@if (Model.CourseID == 0)
+{
+    <h2>New course</h2>
+}
+else
+{
+    <h2>Edit course</h2>
+}
+
+@using (Html.BeginForm("EditCourses", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CourseID)
+    <table class="Tbl">
+        @Html.HiddenFor(model => model.Code)
+        <tr id="courseNameTB">
+            <td>
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Course" })
+            </td>
+            <td>
+                @Html.Label(Model.Code.ToString())
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+    </table>
+    <input id="submit" type="submit" value="Save" class="btn"/>
+    @Html.ActionLink("Back to courses","ManageCourses","Admin")
+}
+<script>
+    $(document).ready(
+        function () {
+            $('.form-control').on('change', function () {
+                var courseName = $('#Name').val();
+                courseName.trim();
+                var Type = 'Course';
+                var CourseId = $('#CourseID').val();
+                $.ajax({
+                    url: "/Admin/CheckForExistingName",
+                    data: { name: courseName, type: Type,id: CourseId },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        var td;
+                        if (data == true) {
+                            td = document.getElementById('userNameValidation');
+                            if (!td) {
+                                var tableRow = document.querySelector('.Tbl' + ' tbody' + ' #courseNameTB');
+                                var label = document.createElement('label');
+                                label.id = 'warning';
+                                label.innerText = 'This course already exists';
+                                td = document.createElement('td');
+                                td.id = 'userNameValidation';
+                                td.appendChild(label);
+                                tableRow.appendChild(td);
+                                $("#submit").attr('disabled', true);
+                            }
+                        }
+                        else {
+                            td = document.getElementById('userNameValidation');
+                            if (td) {
+                                td.parentElement.removeChild(td);
+                                $("#submit").attr('disabled', false);
+                            }
+                        }
+                    }
+                });
+            });
+        }
+        );
+</script>
+<style>
+    #warning {
+        color: red;
+    }
+</style>

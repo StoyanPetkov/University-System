@@ -1,0 +1,40 @@
+﻿@model University_System.ViewModels.DefaultViewModel.DefaultControllerLoginVM
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("Login", "Default", FormMethod.Post))
+{
+    <table class="table-condensed">
+        <tr id="TR">
+            <td>
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @placeholder = "Username" })
+            </td>
+            <td>
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
+            </td>
+            <td>
+                @Html.EnumDropDownListFor(model => model.UserType, "Select UserType", new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => Model.UserType)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Log In" class="btn" />
+            </td>
+        </tr>
+    </table>
+}

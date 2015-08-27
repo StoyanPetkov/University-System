@@ -1,0 +1,31 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerTeacherVM
+
+@{
+    ViewBag.Title = "ShowTeachingSubjects";
+}
+
+<h2>@Model.FirstName</h2>
+
+<table class="table-condensed">
+    <tr>
+        <td>
+            <b>Course</b>
+        </td>
+        <td>
+            <b>Subjects</b>
+        </td>
+    </tr>
+    @foreach (var item in Model.CourseSubjectList)
+    {
+        <tr>
+            <td>
+                @item.Course.Name
+            </td>
+            <td>
+                @item.Subject.Name
+            </td>
+        </tr>
+    }
+</table>
+<br />
+@Html.ActionLink("back", "ManageTeachers", "Admin")

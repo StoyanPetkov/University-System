@@ -1,0 +1,62 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerSubjectVM
+
+@{
+    ViewBag.Title = "ManageSubjects";
+}
+
+<h2>ManageSubjects</h2>
+
+<p>
+    <b>@Html.ActionLink("Add new subject", "EditSubjects", "Admin", new { @id = 0 }, null)</b>
+</p>
+
+<table class="table">
+    <tr>
+        <td>
+            <b>
+                Subject
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.subjectList)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                <button style="background-color: Transparent;border: none; cursor:pointer; outline:none;" onclick="CheckCourseSubject(@item.Id)">Delete</button>
+                @*@Html.ActionLink("Delete", "DeleteSubject", "Admin", new { @id = item.Id }, null) |*@
+                @Html.ActionLink("Edit", "EditSubjects", "Admin", new { @id = item.Id }, null) |
+                @Html.ActionLink("Xls Export", "ExportSubjectGrade", "Admin", new { @id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("Back", "Home", "Admin")
+        </td>
+    </tr>
+</table>
+<script>
+    function CheckCourseSubject(ID) {
+        $.ajax({
+            url: "/Admin/DeleteSubject",
+            data: { id: ID },
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                if (data == true)
+                {
+                    alert("Can't delete this subject");
+                }
+                else
+                {
+                    location.reload();
+                }
+            }
+        });
+    };
+</script>

@@ -1,0 +1,451 @@
+﻿@model University_System.ViewModels.ArticleViewModel.ArticleControllerArticlesVM
+
+@{
+    ViewBag.Title = "Articles";
+}
+
+<h2>Articles</h2>
+@if (University_System.Models.AuthenticationManager.LoggedUser.GetType().BaseType.Equals(typeof(University_System.Entities.Teacher)))
+{
+    @Html.ActionLink("Add new article", "EditArticle", "Article", new { @id = 0 }, null)
+}
+<hr />
+<div style="margin-left:5%;">
+    <div class="bodyContainer">
+        @foreach (var item in Model.Articles)
+            {
+            <table class="Tbl@(item.Key.Id)">
+                <tr style="text-align:center" id="TitleTR@(item.Key.Id)">
+                    <td>
+                        <h3><b style="color:tan">@item.Key.Title</b></h3>
+                    </td>
+                </tr>
+                <tr id="ArticleContentTR@(item.Key.Id)">
+                    <td>
+                        <textarea id="ArticleContent@(item.Key.Id)" readonly="readonly" style="resize:none; border:0px;background-color:#E6E6E6; width: 550px; height:200px;">@item.Key.Content</textarea>
+                    </td>
+                    <td id="@Model.ArticleId">
+                        @foreach (var like in Model.IsLiked)
+                        {
+                            if (like.Key == item.Key.Id && like.Value == true)
+                            {
+                                <button class="btnLike" data-article="@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">UnLike</button><label class="labelLike@(item.Key.Id)">@item.Value</label><hr />
+                            }
+                            if (like.Key == item.Key.Id && like.Value == false)
+                            {
+                                <button class="btnLike" data-article="@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Like</button><label class="labelLike@(item.Key.Id)">@item.Value</label><hr />
+                            }
+                        }
+                        <button class="commentBtn" data-article="@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Comment</button><hr />
+                        @if (item.Key.TeacherID == University_System.Models.AuthenticationManager.LoggedUser.Id)
+                        {
+                            <a href="~/Article/EditArticle?id=@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Edit</a><hr />
+                            <a href="~/Article/DeleteArticle?id=@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Delete</a>
+                        }
+                    </td>
+                </tr>
+                <tr id="InfoTR@(item.Key.Id)">
+                    <td>
+                        <b>Created on: </b><label style="color:royalblue">@item.Key.DateCreated |</label>
+                        <b>Created by: </b><label style="color:coral">@item.Key.Teacher.FirstName  @item.Key.Teacher.LastName |</label>
+                        <b>Subject: </b><label style="color:limegreen">@item.Key.Subject.Name</label>
+                    </td>
+                </tr>
+                @foreach (var comments in Model.CommentList)
+                {
+                    if (comments.Key == item.Key.Id)
+                    {
+                        foreach (var comment in comments.Value)
+                        {
+                            if (comment.ParentComment == null)
+                            {
+                                <tr id="CommentTR@(comment.Id)" style="background-color:antiquewhite;border-bottom:5px solid; border-bottom-color:white;">
+                                    <td>
+                                        <textarea class="commentArea@(comment.Id)" readonly="readonly" style="resize:none; width:574px; height:60px; background-color:#FFD698; border:0px;">@comment.Content</textarea>
+                                    </td>
+                                </tr>
+                                <tr class="commentActionBtns@(comment.Id)">
+                                    <td class="ReplyActionBtns@(comment.Id)">
+                                        <button class="replyBtn" style="background-color: Transparent;border: none; cursor:pointer;outline:none;" data-article="@item.Key.Id" data-commentId="@comment.Id">Reply</button>
+                                        @if (comment.UserID == University_System.Models.AuthenticationManager.LoggedUser.Id && University_System.Models.AuthenticationManager.LoggedUser.GetType().BaseType.Equals(typeof(University_System.Entities.Teacher)))
+                                        {
+                                            <button class="editCommentBtn" style="background-color: Transparent;border: none; cursor:pointer;outline:none;" data-article="@item.Key.Id" data-commentId="@comment.Id">Edit</button>
+                                            @Html.ActionLink("Delete", "DeleteComment", "Article", new { @id = comment.Id }, null)
+                                        }
+                                        @foreach (var userName in Model.UserDictionary)
+                                        {
+                                            if (userName.Key == comment.Id)
+                                            {
+                                                <label style="float:right; font-size:smaller">By:<span style="color:darkgreen;font-size:smaller">@userName.Value</span> On:<span style="color:darkgreen;font-size:smaller">@comment.DateCreated</span></label>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                foreach (var reply in comments.Value)
+                                {
+                                    if (reply.ParentComment != null && reply.ParentComment.Id == comment.Id)
+                                    {
+                                        <tr class="ReplyTR@(reply.Id)">
+                                            <td style="padding-left:25px; padding-top:3px; border-bottom:solid 1px; border-bottom-color:white;">
+                                                <textarea class="replyArea@(reply.Id)" readonly="readonly" style="resize:none; width:540px; height:60px; background-color:#FFE2B7; border:0px;">@reply.Content</textarea>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="editReplyTD@(reply.Id)" style="border-bottom:5px solid; border-bottom-color:white">
+                                                @if (reply.UserID == University_System.Models.AuthenticationManager.LoggedUser.Id && reply.UserType == Model.UserType)
+                                                {
+                                                    <button class="editReplyBtn" style="background-color: Transparent;border: none; cursor:pointer;outline:none;" data-article="@item.Key.Id" data-replyId="@reply.Id">Edit</button>
+                                                    @Html.ActionLink("Delete reply", "DeleteReply", "Article", new { @id = reply.Id }, null);
+                                                }
+                                                @foreach (var userName in Model.UserDictionary)
+                                                {
+                                                    if (userName.Key == reply.Id)
+                                                    {
+                                                        <label style="float:right; font-size:smaller">By:<span style="color:green; font-size:smaller">@userName.Value</span> On:<span style="color:green; font-size:smaller">@reply.DateCreated</span></label>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            </table>
+        }
+    </div>
+</div>
+
+<div id="test" style="float:left">
+</div>
+
+<script>
+    $(document).ready(
+
+        function () {
+            var commentDisplayed = false;
+            var replyDisplayed = false;
+
+            function styleButton(btn) {
+                btn.style.backgroundColor = 'transparent';
+                btn.style.border = 'none';
+                btn.style.cursor = 'pointer';
+                btn.style.outline = 'none';
+            }
+
+            $(".commentBtn").on("click", function (e) {
+                if (commentDisplayed) {
+                    return;
+                }
+                commentDisplayed = true;
+
+                var ArticleId = (Number(e.target.getAttribute('data-article')) || 0);
+
+                var buttonRow = document.createElement('tr');
+                buttonRow.id = 'ActionCommentTR' + ArticleId;
+
+                var btns = document.createElement('td');
+                var btnSend = document.createElement('button');
+
+                btnSend.classList.add('sendCommentBtn');
+
+                btnSend.addEventListener('click', function () {
+                    Comment(ArticleId, 0);
+                });
+
+                btnSend.setAttribute('data-article', ArticleId);
+                styleButton(btnSend);
+                btnSend.innerText = 'Comment';
+
+                var btnCancel = document.createElement('button');
+
+                btnCancel.classList.add('cancelCommentBtn');
+                btnCancel.addEventListener('click', function () {
+                    CancelComment(ArticleId);
+                });
+                btnCancel.setAttribute('data-article', ArticleId);
+                styleButton(btnCancel);
+                btnCancel.innerText = 'Cancel';
+
+                btns.appendChild(btnSend);
+                btns.appendChild(btnCancel);
+                buttonRow.appendChild(btns);
+
+                var commentRow = document.createElement('tr');
+                commentRow.id = 'CommentTR' + ArticleId;
+
+                var commentTd = document.createElement('td');
+                var commentArea = document.createElement('textarea');
+                commentArea.id = 'commentingTextArea';
+
+                commentArea.style.display = 'block';
+                commentArea.style.backgroundColor = '#72A4D2';
+                commentArea.style.border = '0px';
+                commentArea.style.width = '450px';
+                commentArea.style.height = '80px';
+                commentArea.style.resize = 'none';
+
+                commentTd.appendChild(commentArea);
+                commentRow.appendChild(commentTd);
+
+                $('.Tbl' + ArticleId + ' tbody' + ' #InfoTR' + ArticleId).after(buttonRow);
+                $('.Tbl' + ArticleId + ' tbody' + ' #InfoTR' + ArticleId).after(commentRow);
+            });
+
+            $(".replyBtn").on("click", function (e) {
+                if (replyDisplayed || commentDisplayed) {
+                    return;
+                }
+                replyDisplayed = true;
+                var ArticleId = (Number(e.target.getAttribute('data-article')) || 0);
+                var CommentId = (Number(e.target.getAttribute('data-commentId')) || 0);
+
+                var buttonRow = document.createElement('tr');
+                buttonRow.id = 'ActionReCommentBtnTR' + CommentId;
+
+                var btns = document.createElement('td');
+                var btnSend = document.createElement('button');
+                btnSend.innerText = 'Comment';
+                var btnCancel = document.createElement('button');
+                btnCancel.innerText = 'Cancel';
+
+                btnSend.addEventListener("click", function () {
+                    Reply(CommentId, 0)
+                });
+                btnCancel.addEventListener("click", function () {
+                    CancelReply(CommentId, ArticleId);
+                })
+
+                btns.appendChild(btnSend);
+                btns.appendChild(btnCancel);
+                buttonRow.appendChild(btns);
+
+                var commentRow = document.createElement('tr');
+                commentRow.id = 'ActionReCommentTR' + CommentId;
+
+                var commentTd = document.createElement('td');
+                var commentArea = document.createElement('textarea');
+                commentArea.id = 'RecommentingTextArea' + CommentId;
+
+                commentArea.style.backgroundColor = '#6BCAE2';
+                commentArea.style.border = '0px';
+                commentArea.style.width = '450px';
+                commentArea.style.height = '80px';
+                commentArea.style.resize = 'none';
+
+                styleButton(btnSend);
+                styleButton(btnCancel);
+
+                commentTd.appendChild(commentArea);
+                commentRow.appendChild(commentTd);
+                $('.Tbl' + ArticleId + ' tbody' + ' .commentActionBtns' + CommentId).after(buttonRow);
+                $('.Tbl' + ArticleId + ' tbody' + ' .commentActionBtns' + CommentId).after(commentRow);
+            });
+
+            $(".editCommentBtn").on("click", function (e) {
+                if (replyDisplayed || commentDisplayed) {
+                    return;
+                }
+                replyDisplayed = true;
+                var ArticleId = (Number(e.target.getAttribute('data-article')) || 0);
+                var CommentId = (Number(e.target.getAttribute('data-commentId')) || 0);
+                $(".commentArea" + CommentId).attr("readonly", false);
+                $(".commentArea" + CommentId).css({
+                    "border-color": "#C1E00F",
+                    "border-width": "2px",
+                    "border-style": "solid"
+                });
+                var partial = document.createDocumentFragment();
+                var tableBody = document.querySelector('.Tbl' + ArticleId + ' tbody' + ' .ReplyActionBtns' + CommentId);
+                var btnReply = document.createElement('button');
+                btnReply.innerText = 'Ok';
+                var btnCancelReply = document.createElement('button');
+                btnCancelReply.innerText = 'Cancel';
+                btnReply.id = 'editComment' + CommentId;
+                btnCancelReply.id = 'cancelEditComment' + CommentId;
+
+                btnReply.addEventListener('click', function () {
+                    Comment(ArticleId, CommentId);
+                });
+                btnCancelReply.addEventListener('click', function () {
+                    CancelEditComment(CommentId, ArticleId);
+                });
+
+                styleButton(btnReply);
+                styleButton(btnCancelReply);
+                partial.appendChild(btnReply);
+                partial.appendChild(btnCancelReply);
+                tableBody.appendChild(partial);
+
+            });
+
+            $(".editReplyBtn").on("click", function (e) {
+                if (replyDisplayed || commentDisplayed) {
+                    return;
+                }
+                replyDisplayed = true;
+                var ArticleId = (Number(e.target.getAttribute('data-article')) || 0);
+                var replyId = (Number(e.target.getAttribute('data-replyId')) || 0);
+                $(".replyArea" + replyId).attr("readonly", false);
+                $(".replyArea" + replyId).css({
+                    "border-color": "#C1E00F",
+                    "border-width": "2px",
+                    "border-style": "solid"
+                });
+
+                var partial = document.createDocumentFragment();
+                var tableBody = document.querySelector('.Tbl' + ArticleId + ' tbody' + ' .editReplyTD' + replyId);
+                var btnOk = document.createElement('button');
+                var btnCancel = document.createElement('button');
+                btnOk.id = 'editReplyBtnOk' + replyId;
+                btnCancel.id = 'editReplyBtnCancel' + replyId;
+                btnOk.innerText = 'Ok';
+                btnCancel.innerText = 'Cancel';
+
+                styleButton(btnOk);
+                styleButton(btnCancel);
+
+                btnOk.addEventListener('click', function () {
+                    Reply(0, replyId);
+                });
+                btnCancel.addEventListener('click', function () {
+                    CancelEditReply(replyId, ArticleId);
+                });
+
+                partial.appendChild(btnOk);
+                partial.appendChild(btnCancel);
+                tableBody.appendChild(partial);
+            });
+
+            $('.btnLike').on('click', function (e) {
+                var ArticleId = (Number(e.target.getAttribute('data-article')) || 0);
+                var button = e.target;
+                var isLiked = button.innerText;
+                $.ajax({
+                    url: "/Article/Like",
+                    data: { id: ArticleId, value: isLiked },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+
+                        location.reload();
+                    }
+                });
+            })
+
+            function Comment(ArticleId, CommentId) {
+                var commentContent = "";
+                if (CommentId == 0) {
+                    commentContent = $("#CommentTR" + ArticleId).find('#commentingTextArea').val();
+                }
+                else {
+                    commentContent = $(".commentArea" + CommentId).val();
+                }
+                if (commentContent == "") {
+                    alert("Input content !");
+                    return;
+                }
+                $.ajax({
+                    url: "/Article/Comment",
+                    data: { articleId: ArticleId, commentId: CommentId, content: commentContent },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        $('.textAreaComment' + ArticleId).hide();
+                        $('#textAreaCommentButtons' + ArticleId).hide();
+                        location.reload();
+                    }
+                });
+            }
+            function CancelComment(ArticleId) {
+
+                if (!commentDisplayed) {
+                    return;
+                }
+
+                var articleBody = document.querySelector('.Tbl' + ArticleId + ' tbody');
+                var articleButtons = document.getElementById('ActionCommentTR' + ArticleId);
+                var articleComment = document.getElementById('CommentTR' + ArticleId);
+
+                articleBody.removeChild(articleButtons);
+                articleBody.removeChild(articleComment);
+
+                commentDisplayed = false;
+            }
+            function Reply(CommentId, ReplyId) {
+                var ReplyContent = "";
+                if (ReplyId == 0) {
+                    ReplyContent = $("#RecommentingTextArea" + CommentId).val();
+                }
+                else {
+                    ReplyContent = $(".replyArea" + ReplyId).val();
+                }
+                if (ReplyContent == "") {
+                    alert("Input reply !");
+                    return;
+                }
+                $.ajax({
+                    url: "/Article/Reply",
+                    data: { commentId: CommentId, replyId: ReplyId, content: ReplyContent },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        $('#ActionReCommentBtnTR' + CommentId).hide();
+                        $('#ActionReCommentTR' + CommentId).hide();
+                        $(".replyBtn").off();
+                        location.reload();
+                    }
+                });
+            };
+            function CancelEditComment(CommentId, ArticleId) {
+                if (!replyDisplayed) {
+                    return;
+                }
+
+                var textareaRow = document.querySelector('.Tbl' + ArticleId + ' tbody' + ' .CommentTR' + CommentId);
+                var btnRow = document.querySelector('.Tbl' + ArticleId + ' tbody' + ' .ReplyActionBtns' + CommentId);
+
+                var okBtn = document.getElementById('editComment' + CommentId);
+                var cancelBtn = document.getElementById('cancelEditComment' + CommentId);
+                $('.commentArea' + CommentId).attr('readonly', true);
+                $('.commentArea' + CommentId).css({
+                    'border-width': '0px'
+                });
+
+                btnRow.removeChild(okBtn);
+                btnRow.removeChild(cancelBtn);
+                replyDisplayed = false;
+            };
+            function CancelEditReply(ReplyId, ArticleId) {
+                if (!replyDisplayed) {
+                    return;
+                }
+                $(".replyArea" + ReplyId).attr("readonly", true);
+                $(".replyArea" + ReplyId).css({
+                    "border-color": "#C1E00F",
+                    "border-width": "0px",
+                    "border-style": "solid"
+                });
+                var btnOK = document.getElementById('editReplyBtnOk' + ReplyId);
+                var btnCancel = document.getElementById('editReplyBtnCancel' + ReplyId);
+                var tableBody = document.querySelector('.Tbl' + ArticleId + ' tbody' + ' .editReplyTD' + ReplyId);
+                tableBody.removeChild(btnCancel);
+                tableBody.removeChild(btnOK);
+                replyDisplayed = false;
+            };
+            function CancelReply(CommentId, ArticleId) {
+                if (!replyDisplayed) {
+                    return;
+                }
+
+                var btnsRow = document.getElementById('ActionReCommentBtnTR' + CommentId);
+                var commentRow = document.getElementById('ActionReCommentTR' + CommentId);
+                var tableBody = document.querySelector('.Tbl' + ArticleId + ' tbody');
+                tableBody.removeChild(commentRow);
+                tableBody.removeChild(btnsRow);
+                replyDisplayed = false;
+            };
+        }
+        );
+</script>

@@ -1,0 +1,55 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerTitleVM
+
+@{
+    ViewBag.Title = "ManageTitles";
+}
+
+<h2>ManageTitles</h2>
+
+<p>
+    <b>@Html.ActionLink("Add new title", "EditTitles", "Admin", new { @id = 0 }, null)</b>
+</p>
+
+<table class="table-condensed">
+    <tr>
+        <td>
+            <b>
+                Title
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.titleList)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td style="padding-left:40px;">
+                <button style="background-color: Transparent;border: none; cursor:pointer; outline:none;" onclick="CheckTeachersTitles(@item.Id)">Delete</button>
+                @Html.ActionLink("Edit", "EditTitles", "Admin", new { @id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<br />
+@Html.ActionLink("Back", "Home", "Admin")
+<script>
+    function CheckTeachersTitles(ID) {
+        $.ajax({
+            url: "/Admin/DeleteTitle",
+            data: { id: ID },
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                if (data == true)
+                {
+                    alert("cant delete this title");
+                }
+                else
+                {
+                    location.reload();
+                }
+            }
+        });
+    };
+</script>

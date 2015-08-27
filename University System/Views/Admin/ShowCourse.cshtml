@@ -1,0 +1,23 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "ShowCourse";
+}
+
+<p>
+    @Html.ActionLink("Add new course to subject", "EditSubjectCourse", "Admin", new { @id = Model.subjectID }, null)
+</p>
+
+<h3>Courses</h3>
+
+<table class="table">
+    @foreach (var course in Model.courseList)
+    {
+        <tr>
+            <td>
+                @course.Name
+            </td>
+        </tr>
+    }
+</table>
+@Html.ActionLink("Back", "ManageCourseSubject", "Admin")

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar" style="font:100"></span>
+                </button>
+                @**@
+                @if (University_System.Models.AuthenticationManager.LoggedUser != null)
+                {
+                    string user = University_System.Models.AuthenticationManager.LoggedUser.UserName;
+                    @Html.ActionLink("Log out", "Logout", "Default", new { area = "" }, new { @class = "navbar-right",style="padding-top:15px;" })
+                    if (University_System.Models.AuthenticationManager.LoggedUser.GetType().Equals(typeof(University_System.Entities.Administrator)) == true)
+                    {
+                        @Html.ActionLink(user, "Home", "Admin", new { area = "" }, new { @class = "navbar-brand",style="color:red;" })
+                        @Html.ActionLink("Administrators", "ManageAdministrators", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Teachers", "ManageTeachers", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Students", "ManageStudents", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Courses", "ManageCourses", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Subjects", "ManageSubjects", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("CourseSubjects", "ManageCourseSubject", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Titles", "ManageTitles", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("Grades", "ShowCourses", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    if (University_System.Models.AuthenticationManager.LoggedUser.GetType().BaseType.Equals(typeof(University_System.Entities.Teacher)) == true)
+                    {
+                        @Html.ActionLink(user, "Index", "Teacher", new { area = "" }, new { @class = "navbar-brand", style = "color:red;" })
+                        @Html.ActionLink("My Courses", "Courses", "Teacher", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("My Articles", "Articles", "Article", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("My Account", "Edit", "Teacher", new {@id = University_System.Models.AuthenticationManager.LoggedUser.Id, area = "" }, new { @class = "navbar-brand" })
+                    }
+                    if (University_System.Models.AuthenticationManager.LoggedUser.GetType().BaseType.Equals(typeof(University_System.Entities.Student)) == true)
+                    {
+                        @Html.ActionLink(user, "Index", "Student", new { area = "" }, new { @class = "navbar-brand", style = "color:red;" })
+                        @Html.ActionLink("My Grades", "ShowDetails", "Student", new { @id = University_System.Models.AuthenticationManager.LoggedUser.Id,  area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("My Articles", "Articles", "Article", new { area = "" }, new { @class = "navbar-brand" })
+                        @Html.ActionLink("My Account", "ChangePassword", "Student", new { @id = University_System.Models.AuthenticationManager.LoggedUser.Id, area = "" }, new { @class = "navbar-brand" })
+                    }
+                }
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Stoyan Petkov &copy;</p>
+        </footer>
+    </div>
+</body>
+</html>

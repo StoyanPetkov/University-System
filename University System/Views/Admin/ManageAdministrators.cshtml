@@ -1,0 +1,71 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerAdminVM
+
+@{
+    ViewBag.Title = "ManageAdministrators";
+}
+
+<h2>ManageAdministrators</h2>
+
+<p>
+    <b>@Html.ActionLink("Add new admin", "Edit", "Admin", new { @id = 0 }, null)</b>
+</p>
+
+<table class="table">
+    <tr>
+        <td>
+            <b>
+                First name
+            </b>
+        </td>
+        <td>
+            <b>
+                Last name
+            </b>
+        </td>
+        <td>
+            <b>
+                User name
+            </b>
+        </td>
+        <td>
+            <b>
+                Is Active
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.administratorList)
+    {
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.LastName
+            </td>
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @item.IsActive
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteAdministrator", "Admin", new { @id = item.Id }, null) |
+                @if (item.Id == University_System.Models.AuthenticationManager.LoggedUser.Id)
+                {
+                    @Html.ActionLink("Edit", "Edit", "Admin", new { @id = item.Id }, null)
+                }
+            </td>
+        </tr>
+        }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("Back", "Home", "Admin")
+        </td>
+    </tr>
+</table>
+
+
+
+

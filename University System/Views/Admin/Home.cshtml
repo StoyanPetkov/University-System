@@ -1,0 +1,113 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerAdminVM
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<h3>Welcome <span style="font-style:italic; font-family:Verdana">@Model.FirstName @Model.LastName</span></h3>
+<br />
+<label><u><i>There are currently</i></u></label>
+<table class="table-responsive">
+    <tr>
+        <td>
+            <b id="active">Active students:</b>
+        </td>
+        <td style="padding-left:10px;">
+            @Model.ActiveStudentCount
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b id="inActive">InActive students:</b>
+        </td>
+        <td style="padding-left:10px;">
+            @Model.InActiveStudentCount
+        </td>
+    </tr>
+</table>
+<hr />
+<label><u><i>And currently</i></u></label>
+<table>
+    <tr>
+        <td>
+            <b id="active">
+                Active teachers:
+            </b>
+        </td>
+        <td>
+            @Model.ActiveTeacherCount
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b id="inActive">
+                InActive teachers:
+            </b>
+        </td>
+        <td>
+            @Model.InActiveTeacherCount
+        </td>
+    </tr>
+</table>
+<br />
+<label><u><i>With</i></u></label>
+<table>
+    <tr>
+        <td>
+            <b id="neutral">
+                Titles:
+            </b>
+        </td>
+        <td>
+            @Model.TitleCount
+        </td>
+    </tr>
+
+</table>
+<hr />
+<label><u><i>Grouped in</i></u></label>
+<table>
+    <tr>
+        <td id="neutral">
+            <b>
+                Courses:
+            </b>
+        </td>
+        <td>
+            @Model.CourseCount
+        </td>
+    </tr>
+</table>
+<br />
+<label><u><i>Studying</i></u></label>
+<table>
+    <tr>
+        <td id="neutral">
+            <b>
+                Subjects:
+            </b>
+        </td>
+        <td>
+            @Model.SubjectCount
+        </td>
+    </tr>
+</table>
+
+
+<style>
+    label {
+        color: orangered;
+    }
+
+    #active {
+        color: green;
+    }
+
+    #inActive {
+        color: cornflowerblue;
+    }
+
+    #neutral {
+        color: orange;
+    }
+</style>

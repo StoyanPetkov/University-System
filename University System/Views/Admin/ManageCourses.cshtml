@@ -1,0 +1,55 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseVM
+
+@{
+    ViewBag.Title = "ManageCourses";
+}
+
+<h2>ManageCourses</h2>
+
+<p>
+    <b>@Html.ActionLink("Add new course", "EditCourses", "Admin", new { @id = 0 }, null)</b>
+</p>
+
+<table class="table-condensed">
+    <tr>
+        <td>
+            <b>
+                Name
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.courseList)
+    {
+        <tr >
+            <td>
+                @item.Name
+            </td>
+            <td style="padding-left:40px;">
+                <button style="background-color: Transparent;border: none; cursor:pointer; outline:none;" onclick="CheckCourseStudents(@item.Id)">Delete</button> |
+                @Html.ActionLink("Edit", "EditCourses", "Admin", new { @id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<br />
+@Html.ActionLink("Back", "Home", "Admin")
+<script>
+    function CheckCourseStudents(ID) {
+        $.ajax({
+            url: "/Admin/DeleteCourses",
+            data: { id: ID },
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                if (data == true)
+                {
+                    alert("Can't delete this subject");
+                }
+                else
+                {
+                    location.reload();
+                }
+            }
+        });
+    };
+</script>

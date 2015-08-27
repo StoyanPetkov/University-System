@@ -1,0 +1,83 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "EditCourseSubject";
+}
+@if (Model.courseID == 0)
+{
+    <h2>New course</h2>
+}
+else
+{
+    <h2>Add subject to course</h2>
+}
+
+@using (Html.BeginForm("EditCourseSubject", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CourseSubjectID)
+    @Html.HiddenFor(model => model.courseID)
+    <table class="table-responsive">
+        <tr id="ddlTR">
+            <td>
+                @Html.DropDownListFor(model => model.subjectID, Model.ListItems, "Select subject", new {@class="form-control",style="width:200px;" }) 
+            </td>
+            <td>
+                @Html.ActionLink("Add subject", "EditSubjects", "Admin", new {@id = 0 },null)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.subjectID)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Save" class="btn"/>
+                @Html.ActionLink("back to subjects", "ShowSubjects", "Admin", new { @id = Model.courseID },null)
+            </td>
+        </tr>
+    </table>
+}
+<script>
+    $(document).ready(function () {
+        $('#subjectID').on('change', function () {
+            var SubjectId = $('#subjectID').val();
+            var CourseId = $('#courseID').val();
+            $.ajax({
+                url: "/Admin/CheckForAddedSubjects",
+                data: { subjectId: SubjectId, courseId: CourseId },
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    var tr;
+                    var td;
+                    if (data == true) {
+                        tr = document.getElementById('warningTr');
+                        td = document.getElementById('warningTd');
+                        if (!td) {
+                            var tableRow = document.querySelector('.table-responsive' + ' tbody' + ' #ddlTR');
+                            var label = document.createElement('label');
+                            label.id = 'warningLabel';
+                            label.innerText = 'This course already contains that subject !';
+                            var td = document.createElement('td');
+                            td.id = 'warningTd';
+                            var tr = document.createElement('tr');
+                            tr.id = 'warningTr';
+                            td.appendChild(label);
+                            tr.appendChild(td);
+                            $('#ddlTR').after(tr);
+                            $('.btn').attr('disabled', true);
+                        }
+                    }
+                    else {
+                        td = document.getElementById('warningTd');
+                        if (td) {
+                            td.parentElement.removeChild(td);
+                            $('.btn').attr('disabled', false);
+                        }
+                    }
+                }
+            });
+        })
+    });
+</script>

@@ -1,0 +1,27 @@
+﻿@model University_System.ViewModels.TeacherViewModel.TeacherControllerTeacherVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Hello <span style="font-style:italic; font-family:Verdana">@Model.FirstName @Model.LastName</span></h3>
+<br />
+
+@foreach (var courseSubject in Model.CourseSubjectList)
+{
+    <ul style="list-style-type:none;">
+        <li>
+            <b>@courseSubject.Key</b>
+        </li>
+    </ul>
+    foreach (var subject in courseSubject.Value)
+    {
+        <ol style="list-style-type:none;">
+            <li>
+                <i>@subject.Name</i>
+            </li>
+        </ol>
+    }
+    <br />
+    <hr />
+}

@@ -1,0 +1,40 @@
+﻿@model University_System.ViewModels.TeacherViewModel.TeacherControllerTeacherVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Teacher", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+    <table class="table-responsive">
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.FirstName , new { @class = "form-control", @placeholder = "First Name", style="width:200px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name", style = "width:200px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.LastName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Password", style = "width:200px;" })
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Save" class="btn"/>
+    @Html.ActionLink("Back", "Index", "Teacher")
+}

@@ -1,0 +1,39 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "ShowSubjects";
+}
+
+<h2>Subject list</h2>
+
+<p>
+    @Html.ActionLink("Add new subject to course", "EditCourseSubject", "Admin", new { @courseID = Model.courseID }, null)
+</p>
+
+
+<table class="table">
+    <tr>
+        <td>
+            <b>Subjects</b>
+        </td>
+    </tr>
+    @foreach (var item in Model.subjectList)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteCourseSubject", "Admin", new { @id = item.Id, @courseId = Model.courseID }, null)
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("Back to course list", "ManageCourseSubject", "Admin")
+        </td>
+    </tr>
+</table>
+

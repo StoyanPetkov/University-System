@@ -1,0 +1,44 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "ManageCourseSubject";
+}
+
+
+<div style="width:90%">
+    <div style="float:left; width:50%;">
+        <h3>Course list</h3>
+        <table class="table-condensed">
+            @foreach (var item in Model.courseList)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(@item.Name, "ShowSubjects", "Admin", new { @id = item.Id }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div style="float:right; width:50%;">
+        <h3>Subject list</h3>
+        <table class="table-condensed">
+            @foreach (var item in Model.subjectList)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(@item.Name, "ShowCourse", "Admin", new { @id = item.Id }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<div  style="margin-top:40%;">
+    @Html.ActionLink("Back", "Home", "Admin")
+</div>
+<footer>
+    
+</footer>
+@*<br />
+*@
+

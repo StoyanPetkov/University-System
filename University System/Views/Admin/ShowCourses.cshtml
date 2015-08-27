@@ -1,0 +1,20 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseVM
+
+@{
+    ViewBag.Title = "ShowCourses";
+}
+
+<h3>Course list</h3>
+
+<table class="table-condensed">
+    @foreach (var item in Model.courseList)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(@item.Name, "ShowCourseStudents", "Admin", new { @id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<br />
+@Html.ActionLink("Back", "Home", "Admin")

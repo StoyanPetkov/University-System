@@ -1,0 +1,73 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerSubjectVM
+
+@{
+    ViewBag.Title = "EditSubjects";
+}
+@if (Model.SubjectID == 0)
+{
+    <h2>New subject</h2>
+}
+else
+{
+    <h2>Edit subject</h2>
+}
+
+@using (Html.BeginForm("EditSubjects", "Admin", FormMethod.Post))
+{
+    <table class="table-responsive">
+        @Html.HiddenFor(model => model.SubjectID)
+        <tr id="subjectNameTB">
+            <td>
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Subject", style="width:200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+    </table>
+    <input id="submit" type="submit" value="Save" class="btn"/>
+    @Html.ActionLink("Back", "ManageSubjects", "Admin")
+}
+<script>
+    $(document).ready(
+        function () {
+            $('.form-control').on('change', function () {
+                var subjectName = $('#Name').val();
+                var SubjectId = $('#SubjectID').val();
+                subjectName.trim();
+                var Type = 'Subject';
+                $.ajax({
+                    url: "/Admin/CheckForExistingName",
+                    data: { name: subjectName, type: Type,id:SubjectId },
+                    dataType: "json",
+                    type: "GET",
+                    success: function (data) {
+                        var td;
+                        if (data == true) {
+                            td = document.getElementById('userNameValidation');
+                            if (!td) {
+                                var tableRow = document.querySelector('.table-responsive' + ' tbody' + ' #subjectNameTB');
+                                var label = document.createElement('label');
+                                label.innerText = 'This subject name already exists';
+                                td = document.createElement('td');
+                                td.id = 'userNameValidation';
+                                td.appendChild(label);
+                                tableRow.appendChild(td);
+                                $("#submit").attr('disabled', true);
+                            }
+                        }
+                        else {
+                            td = document.getElementById('userNameValidation');
+                            if (td) {
+                                td.parentElement.removeChild(td);
+                                $("#submit").attr('disabled', false);
+                            }
+                        }
+                    }
+                });
+            })
+        }
+        );
+</script>

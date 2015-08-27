@@ -1,0 +1,75 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerTeacherVM
+
+@{
+    ViewBag.Title = "ManageTeachers";
+}
+
+<h2>ManageTeachers</h2>
+
+
+<p>
+    <b>@Html.ActionLink("Add new teacher", "EditTeachers", "Admin", new { @id = 0 }, null)</b>
+</p>
+
+<table class="table">
+    <tr>
+        <td>
+            <b>
+                First name
+            </b>
+        </td>
+        <td>
+            <b>
+                Last name
+            </b>
+        </td>
+        <td>
+            <b>
+                User name
+            </b>
+        </td>
+        <td>
+            <b>
+                Title
+            </b>
+        </td>
+        <td>
+            <b>
+                Is Active
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.teacherList)
+    {
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.LastName
+            </td>
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @item.Title.Name
+            </td>
+            <td>
+                @item.IsActive
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteTeacher", "Admin", new { @id = item.Id }, null) |
+                @Html.ActionLink("Edit", "EditTeachers", "Admin", new { @id = item.Id }, null) |
+                @Html.ActionLink("Details", "ShowTeachingSubjects", "Admin", new { @id = item.Id }, null) |
+                @Html.ActionLink("Assign course", "AssignToCourse", "Admin", new { @id = item.Id }, null)
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("Back", "Home", "Admin")
+        </td>
+    </tr>
+</table>

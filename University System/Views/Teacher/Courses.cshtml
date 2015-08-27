@@ -1,0 +1,48 @@
+﻿@model University_System.ViewModels.TeacherViewModel.TeacherControllerCoursesVM
+
+@{
+    ViewBag.Title = "Courses";
+}
+
+<h2>My courses</h2>
+<br />
+<ul style="list-style-type:none">
+    @foreach (var item in Model.CourseList)
+    {
+        <li>
+            <input type="radio" value=@item.Id name="Courses" id=@item.Name onchange="GetSubjects(@item.Id)" /><label for="@item.Name" onclick="GetSubjects(@item.Id)">@item.Name</label>
+        </li>
+    }
+</ul>
+
+
+<div id="test" style="">
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+    function GetSubjects(id) {
+        $.ajax({
+            url: "/Teacher/ShowStudents",
+            data: { CourseID: id },
+            dataType: "json",
+            type: "GET",
+            success: function(data){
+                if (data.length > 0)
+                {
+                    var output = "";
+                    for (var i in data)
+                    {
+                        var link = '<a href="/Teacher/StudentDetails?StudentId=-1">text</a><br />';
+                        link = link.replace('-1', data[i].Value);
+                        link = link.replace('text', data[i].Text);
+                        output += link;
+                    }
+                }
+                document.getElementById("test").innerHTML = output;
+            }
+        });
+    }
+
+</script>

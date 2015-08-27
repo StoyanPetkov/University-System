@@ -1,0 +1,40 @@
+﻿@model University_System.ViewModels.StudentViewModel.StudentControllerStudentVM
+
+@{
+    ViewBag.Title = "ShowDetails";
+}
+
+<h2>@Model.FirstName @Model.LastName Details</h2>
+
+
+<table class="table-condensed">
+    <tr>
+        <td>
+            <b>
+                Subject
+            </b>
+        </td>
+        <td>
+            <b>
+                Grade
+            </b>
+        </td>
+    </tr>
+    @foreach (var item in Model.SubjectGradeList)
+    {
+        <tr>
+            <td>
+                @item.Key
+            </td>
+            @foreach (var grade in item.Value)
+            {
+                <td>
+                    @grade
+                </td>
+            }
+            
+        </tr>
+    }
+</table>
+<br />
+@Html.ActionLink("back", "Index", "Student")

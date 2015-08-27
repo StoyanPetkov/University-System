@@ -1,0 +1,31 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "ShowGrades";
+}
+
+<h2>@Model.StudentName</h2> <a href="~/Admin/ExportGrade?studentId=@Model.StudentID">Xls Export</a>
+
+<table class="table" style="text-align:left">
+    @foreach (var item in Model.details)
+    {
+        <tr>
+            <td>
+                @item.Key
+            </td>
+            @foreach (var grade in item.Value)
+            {
+                <td>
+                    @grade.GradeValue
+                </td>
+            }
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("back to student list", "ShowCourseStudents", "Admin", new {@id = Model.CourseSubjectID },null)
+        </td>
+    </tr>
+</table>

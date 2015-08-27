@@ -1,0 +1,32 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerCourseSubjectVM
+
+@{
+    ViewBag.Title = "ShowCourseStudents";
+}
+
+<h2>Student list</h2>
+
+<table class="table">
+    @foreach (var item in Model.studentList)
+    {
+       
+        <tr>
+            <td>
+                @item.FirstName @item.LastName
+            </td>
+            <td>
+                @item.FacultyNumber
+            </td>
+            <td>
+                @Html.ActionLink("Show Grades", "ShowGrades", "Admin", new { @id = item.Id, @courseSubjectID = Model.CourseSubjectID }, null)
+            </td>
+        </tr>
+    }
+</table>
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("back to course list", "ShowCourses", "Admin",new {@id = Model.courseID})
+        </td>
+    </tr>
+</table>

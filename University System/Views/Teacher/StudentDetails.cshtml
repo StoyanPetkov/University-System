@@ -1,0 +1,167 @@
+﻿@model University_System.ViewModels.TeacherViewModel.TeacherControllerStudentsVM
+
+@{
+    ViewBag.Title = "StudentDetails";
+}
+
+<h2>@Model.FirstName @Model.LastName</h2> <a href="/Teacher/ExportGrade?StudentId=@Model.StudentID">Xls Export</a>
+
+@if (Model.SubjectList != null)
+{
+    <table class="table" style="text-align:left">
+        <tr>
+            <td>
+                <b>Subject</b>
+            </td>
+            <td>
+                <b>Action</b>
+            </td>
+        </tr>
+        @foreach (var item in Model.SubjectList)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    <button id="add" class="btn" onclick="AddNewGrade(@item.Id,@Model.StudentID)" data-toggle="modal" data-target="#myModal">Add</button>
+                </td>
+            </tr>
+        }
+    </table>
+}
+<br />
+<hr style="border-style: inset;
+    border-width: 1px;" />
+<br />
+
+<table class="table" style="text-align:left">
+    @foreach (var item in Model.SubjectGradeList)
+    {
+        <tr>
+            <td>
+                @item.Key
+            </td>
+            @foreach (var grade in item.Value)
+            {
+                <td>
+                    <button type="button" id="@grade.Id" onclick="GetGrade(@grade.Id)" data-subject=@grade.Id style="background-color: Transparent;border: none; cursor:pointer; outline:none;" data-toggle="modal" data-target="#myModal">@grade.GradeValue</button>
+                    <input type="image" src="~/Images/1439813136_Edit.png" style="width:12px; height:12px" onclick="GetGrade(@grade.Id)" data-toggle="modal" data-target="#myModal" />
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+<table class="table">
+    <tr>
+        <td>
+            @Html.ActionLink("back", "Courses", "Teacher")
+        </td>
+    </tr>
+</table>
+
+<div class="TextBox">
+</div>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Input grade</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="textbox" id="textbox" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="SaveBtn" class="btn btn-default" onclick="EditGrade()">Save</button>
+                    <button type="button" class="btn btn-default" onclick="DeleteGrade()">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function GetGrade(GradeId) {
+        $.ajax({
+            url: "/Teacher/GetGrade",
+            data: { gradeId: GradeId },
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+                $(".modal-body #textbox").val(data.Text);
+                var output = "<input type='hidden' name='hiddenGradeId' id='hiddenGradeId' value='" + GradeId + "'>";
+                var newTextBoxDiv = $(".TextBox");
+                newTextBoxDiv.after().html(output);
+                newTextBoxDiv.appendTo(".TextBox");
+            }
+        });
+    }
+
+    function EditGrade() {
+        var SubjectId = 0;
+        var StudentId = 0;
+        var Id = $("#hiddenGradeId").val();
+        var Value = $(".modal-body #textbox").val();
+        var errorMsg = "";
+        if (Id===undefined)
+        {
+            Id = 0;
+            SubjectId = $("#hiddenSubjectId").val();
+            StudentId = $("#hiddenStudentId").val();
+        }
+        if (Value >=2 && Value <=6)
+        {
+            $.ajax({
+                url: "/Teacher/EditGrade",
+                data: { gradeId: Id, gradeValue: Value, subjectId: SubjectId,studentId: StudentId },
+                dataType: "json",
+                type: "GET",
+                success: function(data)
+                {
+                    location.reload();
+                }
+            })
+        }
+        else
+        {
+            alert( "Invalid grade !" );
+            $(".modal-body #textbox").val("");
+            Value = undefined;
+            return;
+        }
+    };
+
+    function AddNewGrade(SubjectId, StudentId)
+    {
+        $(".modal-body #textbox").val("");
+        var subject = "<input type='hidden' name='hiddenSubjectId' id='hiddenSubjectId' value='" + SubjectId + "' />";
+        var student = "<input type='hidden' name='hiddenStudentId' id='hiddenStudentId' value='" + StudentId + "' />";
+        var output = subject + student;
+        var newTextBoxDiv = $(".TextBox");
+        newTextBoxDiv.after().html(output);
+        newTextBoxDiv.appendTo(".TextBox");
+    }
+
+    function DeleteGrade()
+    {
+        var Id = $("#hiddenGradeId").val();
+        $.ajax({
+            url: "/Teacher/DeleteGrade",
+            data: { gradeId: Id},
+            dataType: "json",
+            type: "GET",
+            success: function(data)
+            {
+                location.reload();
+            }
+        })
+    }
+</script>

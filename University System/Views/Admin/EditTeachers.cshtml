@@ -1,0 +1,134 @@
+﻿@model University_System.ViewModels.AdminViewModel.AdminControllerTeacherVM
+
+@{
+    ViewBag.Title = "EditTeachers";
+}
+@if (Model.Id == 0)
+{
+    <h2>New teacher</h2>
+}
+else
+{
+    <h2>Edit teacher</h2>
+}
+
+@using (Html.BeginForm("EditTeachers", "Admin", FormMethod.Post))
+{
+    <table class="Tbl">
+        @Html.HiddenFor(model => model.Id)
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First name" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last name" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.LastName)
+            </td>
+        </tr>
+        <tr id="userNameTB">
+            <td>
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @placeholder = "User name" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.UserName)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Password" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.Password)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>IsActive</label>@Html.CheckBoxFor(model => model.isActive)
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DropDownListFor(model => model.TitleID, Model.ListItems, new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.ActionLink("Add title", "EditTitles", "Admin", new { @id = Model.Id }, null)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ValidationMessageFor(model => model.TitleID)
+            </td>
+        </tr>
+    </table>
+    <input id="submit" type="submit" value="Save" class="btn" />
+    @Html.ActionLink("Back", "ManageTeachers", "Admin")
+}
+<script>
+    $(document).ready(
+        function () {
+            var Id = $("#Id").val();
+            if (Id == 0) {
+                $('#isActive').attr('checked', true);
+                $('#UserName').on('change', function () {
+                    var userName = $('#UserName').val();
+                    userName.trim();
+                    var userType = 'Teacher';
+                    $.ajax({
+                        url: "/Admin/CheckForExistingName",
+                        data: { name: userName, type: userType,id:Id },
+                        dataType: "json",
+                        type: "GET",
+                        success: function (data) {
+                            var td;
+                            if (data == true) {
+                                td = document.getElementById('userNameValidation');
+                                if (!td) {
+                                    var tableRow = document.querySelector('.Tbl' + ' tbody' + ' #userNameTB');
+                                    var label = document.createElement('label');
+                                    label.innerText = 'This username already exists';
+                                    label.id = 'warning';
+                                    td = document.createElement('td');
+                                    td.id = 'userNameValidation';
+                                    td.appendChild(label);
+                                    tableRow.appendChild(td);
+                                    $("#submit").attr('disabled', true);
+                                }
+                            }
+                            else {
+                                td = document.getElementById('userNameValidation');
+                                if (td) {
+                                    td.parentElement.removeChild(td);
+                                    $("#submit").attr('disabled', false);
+                                }
+                            }
+                        }
+                    });
+                })
+            }
+            else {
+                $('#UserName').attr('readonly',true);
+            }
+        }
+        );
+</script>
+<style>
+    #warning {
+        color: red;
+    }
+</style>
