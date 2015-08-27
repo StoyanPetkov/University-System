@@ -21,6 +21,7 @@ namespace University_System.Controllers
     {
         public ActionResult Home()
         {
+			string test = "test";
             AdminControllerAdminVM model = new AdminControllerAdminVM();
             StudentRepository studentRepository = new StudentRepository();
             TeacherRepository teacherRepository = new TeacherRepository();
