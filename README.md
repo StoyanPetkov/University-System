@@ -1,2 +1,0 @@
-# University-System
-Summer activity

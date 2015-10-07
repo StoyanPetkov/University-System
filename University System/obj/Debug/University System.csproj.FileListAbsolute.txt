@@ -54,3 +54,28 @@ C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\University System\Universi
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\University System\University System\obj\Debug\University System.csprojResolveAssemblyReference.cache
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\University System\University System\obj\Debug\University_System.Migrations.first.resources
 C:\Users\Stoyan\Documents\Visual Studio 2015\Projects\University System\University System\obj\Debug\University System.csproj.GenerateResource.Cache
+C:\Users\Stoyan\Desktop\University-System\University System\bin\University System.dll.config
+C:\Users\Stoyan\Desktop\University-System\University System\bin\University System.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\University System.pdb
+C:\Users\Stoyan\Desktop\University-System\University System\bin\EntityFramework.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\EntityFramework.SqlServer.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Helpers.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Mvc.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Razor.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.Deployment.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.Razor.dll
+C:\Users\Stoyan\Desktop\University-System\University System\bin\EntityFramework.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\EntityFramework.SqlServer.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Razor.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.Deployment.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Webpages.Razor.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Helpers.xml
+C:\Users\Stoyan\Desktop\University-System\University System\bin\System.Web.Mvc.xml
+C:\Users\Stoyan\Desktop\University-System\University System\obj\Debug\University System.csprojResolveAssemblyReference.cache
+C:\Users\Stoyan\Desktop\University-System\University System\obj\Debug\University_System.Migrations.first.resources
+C:\Users\Stoyan\Desktop\University-System\University System\obj\Debug\University System.csproj.GenerateResource.Cache
+C:\Users\Stoyan\Desktop\University-System\University System\obj\Debug\University System.dll
+C:\Users\Stoyan\Desktop\University-System\University System\obj\Debug\University System.pdb
