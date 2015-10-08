@@ -21,7 +21,6 @@ namespace University_System.Controllers
     {
         public ActionResult Home()
         {
-			string test = "test";
             AdminControllerAdminVM model = new AdminControllerAdminVM();
             StudentRepository studentRepository = new StudentRepository();
             TeacherRepository teacherRepository = new TeacherRepository();
@@ -157,18 +156,31 @@ namespace University_System.Controllers
             return View(model);
         }
 
-        public ActionResult DeleteAdministrator(int id)
+        [HttpPost]
+        public JsonResult GetUserName(int id)
+        {
+            AdministratorRepository adminRepository = new AdministratorRepository();
+            Administrator admin = adminRepository.GetById(id);
+            string name = admin.FirstName + " " + admin.LastName + " ?";
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteAdministrator(int id)
         {
             AdministratorRepository adminRepository = new AdministratorRepository();
             if (id == AuthenticationManager.LoggedUser.Id)
             {
-                return RedirectToAction("ManageAdministrators");
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 Administrator admin = adminRepository.GetById(id);
-                adminRepository.Delete(admin);
-                return RedirectToAction("ManageAdministrators");
+                if (admin != null)
+                {
+                    adminRepository.Delete(admin);
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
         #endregion
@@ -439,13 +451,12 @@ namespace University_System.Controllers
                 sb.Insert(0, 0);
             }
             sb.Insert(0, course.Code.ToString());
-            sb.Insert(0, year);
-
-            if (sb.Length == 8)
+            if (course.Code <= 9)
             {
-                faculityNumber = Convert.ToInt32(sb.ToString());
+                sb.Insert(0, 0);
             }
-
+            sb.Insert(0, year);
+            faculityNumber = Convert.ToInt32(sb.ToString());
             return faculityNumber;
         }
 
@@ -479,7 +490,6 @@ namespace University_System.Controllers
             }
             if (id == 0)
             {
-
                 student.FirstName = studentModel.FirstName;
                 student.LastName = studentModel.LastName;
                 student.UserName = studentModel.UserName;
@@ -1079,7 +1089,7 @@ namespace University_System.Controllers
             return Json(isAdded, JsonRequestBehavior.AllowGet);
         }
 
-       [HttpPost]
+        [HttpPost]
         public ActionResult EditSubjectCourse(AdminControllerCourseSubjectVM subjectCourseModel)
         {
             CourseSubject courseSubject = new CourseSubject();

@@ -209,6 +209,7 @@
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\Admin\ShowCourse.cshtml" />
     <Content Include="Views\Admin\EditSubjectCourse.cshtml" />
+    <Content Include="Views\Shared\_ModalMessage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
