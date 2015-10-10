@@ -35,31 +35,34 @@
     </tr>
     @foreach (var item in Model.administratorList)
     {
-    <tr>
-        <td>
-            @item.FirstName
-        </td>
-        <td>
-            @item.LastName
-        </td>
-        <td>
-            @item.UserName
-        </td>
-        <td>
-            @item.IsActive
-        </td>
-        <td>
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.LastName
+            </td>
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @item.IsActive
+            </td>
+            <td style="text-align:center;">
+                @if (item.Id != University_System.Models.AuthenticationManager.LoggedUser.Id)
+                {
             <!-- Trigger the modal with a button -->
-            <button type="button" class="btn-link" @*style="width:120px;" *@ data-toggle="modal" data-error-info="You can not delete your own account !"
-                data-confirmation="Are you sure you want to delete: "  data-additionalinfo=""  data-admin-id=@item.Id data-target="#ModalMessage">
-                delete
-            </button>
-            @if (item.Id == University_System.Models.AuthenticationManager.LoggedUser.Id)
-            {
-            @Html.ActionLink("Edit", "Edit", "Admin", new { @id = item.Id }, null)
-            }
-        </td>
-    </tr>
+                    <button type="button" class="btn-link" @*style="width:120px;" *@ data-toggle="modal" data-error-info="You can not delete your own account !"
+                            data-confirmation="Are you sure you want to delete: " data-additionalinfo="" data-admin-id=@item.Id data-target="#ModalMessage">
+                        Delete
+                    </button>
+                }
+                else
+                {
+                    @Html.ActionLink("Edit", "Edit", "Admin", new { @id = item.Id }, null)
+                }
+            </td>
+        </tr>
     }
 </table>
 <div>
