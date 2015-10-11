@@ -150,6 +150,7 @@
     <Compile Include="Repositories\TeacherRepository.cs" />
     <Compile Include="Repositories\TitleRepository.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\SecurityService.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerAdminVM.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerCourseSubjectVM.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerCourseVM.cs" />

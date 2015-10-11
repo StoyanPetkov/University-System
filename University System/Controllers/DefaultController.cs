@@ -25,10 +25,8 @@ namespace University_System.Controllers
             else
             {
                 TryUpdateModel(model);
-                User user = new User();
                 AuthenticationManager.Authenticate(model.UserName, model.Password, model.UserType);
-                user = AuthenticationManager.LoggedUser;
-                if (user == null)
+                if (AuthenticationManager.LoggedUser == null)
                 {
                     return RedirectToAction("Login", "Default");
                 }

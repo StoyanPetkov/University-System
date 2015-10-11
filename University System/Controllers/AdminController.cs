@@ -13,6 +13,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Web.UI;
 using University_System.Models;
+using University_System.Services;
 
 namespace University_System.Controllers
 {
@@ -136,12 +137,11 @@ namespace University_System.Controllers
             if (ModelState.IsValid)
             {
                 Administrator admin = null;
-                admin = adminRepository.GetAll(filter: a => a.UserName == model.UserName).FirstOrDefault();
-                if (admin == null)
+                if (adminRepository.GetAll(filter: a => a.UserName == model.UserName).FirstOrDefault() == null)
                 {
                     admin = new Administrator();
                     admin.UserName = model.UserName;
-                    admin.Password = model.Password;
+                    admin.Password = SecurityService.CreateHash(model.Password);
                     admin.FirstName = model.FirstName;
                     admin.LastName = model.LastName;
                     admin.IsActive = true;
@@ -296,7 +296,7 @@ namespace University_System.Controllers
                         teacher.FirstName = teacherModel.FirstName;
                         teacher.LastName = teacherModel.LastName;
                         teacher.UserName = teacherModel.UserName;
-                        teacher.Password = teacherModel.Password;
+                        teacher.Password = SecurityService.CreateHash(teacherModel.Password);
                         title = titleRepository.GetById(teacherModel.TitleID);
                         teacher.Title = title;
                         teacher.IsActive = teacherModel.isActive;
@@ -537,7 +537,7 @@ namespace University_System.Controllers
                     student.FirstName = studentModel.FirstName;
                     student.LastName = studentModel.LastName;
                     student.UserName = studentModel.UserName;
-                    student.Password = studentModel.Password;
+                    student.Password = SecurityService.CreateHash(studentModel.Password);
                     student.IsActive = studentModel.isActive;
                     student.CourseID = studentModel.CourseID;
                     studentRepository.Save(student);
