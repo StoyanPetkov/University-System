@@ -150,6 +150,7 @@
     <Compile Include="Repositories\TeacherRepository.cs" />
     <Compile Include="Repositories\TitleRepository.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\SecurityService.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerAdminVM.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerCourseSubjectVM.cs" />
     <Compile Include="ViewModels\AdminViewModel\AdminControllerCourseVM.cs" />
@@ -209,6 +210,7 @@
     <Content Include="Views\Admin\Home.cshtml" />
     <Content Include="Views\Admin\ShowCourse.cshtml" />
     <Content Include="Views\Admin\EditSubjectCourse.cshtml" />
+    <Content Include="Views\Shared\_ModalMessage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

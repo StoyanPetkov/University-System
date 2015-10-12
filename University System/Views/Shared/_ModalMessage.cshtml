@@ -1,0 +1,63 @@
+﻿<!-- Modal -->
+<div class="modal fade" id="ModalMessage" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center; color:red;"><b id="headerMsg"></b></h4>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <strong id="additional-info"></strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="deleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#ModalMessage').on('show.bs.modal', function (e) {
+            var button = $(e.relatedTarget);
+            var adminId = button.data('admin-id');
+            var errorInfo = button.data('error-info');
+            var additionalInfo = button.data('additionalinfo');
+            var confirmation = button.data('confirmation');
+            var adminId = button.data('admin-id');
+            if (adminId == @University_System.Models.AuthenticationManager.LoggedUser.Id){
+                $('#deleteBtn').hide();
+                $('#headerMsg').html("Error");
+                $('#additional-info').html(errorInfo); }
+            else{
+                $.ajax({
+                    url: "/Admin/GetUserName",
+                    data: { id: adminId },
+                    datType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        var modalBody = $('#additional-info').html(confirmation).append("<p id='userName'>" + data + "</p>");
+                        $('#userName').css('color','Red');
+                        $('#deleteBtn').show();
+                        $('#headerMsg').html("Confirmation");
+                    }
+                });
+            }
+            $('#deleteBtn').on('click',function(){
+                $.ajax({
+                    url: "/Admin/DeleteAdministrator/",
+                    data:{id: adminId},
+                    dataType:"json",
+                    type:"POST",
+                    success: function (data){
+                        if (data == true)
+                            location.reload();
+                        else{
+                            return e.preventDefault();
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>

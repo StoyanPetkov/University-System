@@ -1,9 +1,11 @@
 namespace University_System.Migrations
 {
     using System.Data.Entity.Migrations;
+    using Services;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Context.UniversitySystemContext>
     {
+        
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
@@ -11,14 +13,16 @@ namespace University_System.Migrations
 
         protected override void Seed(Context.UniversitySystemContext context)
         {
-            context.Administrator.AddOrUpdate(
+            string password = "pass";
+            string defaultPassword = SecurityService.CreateHash(password);
+        context.Administrator.AddOrUpdate(
                 a=> a.FirstName,
                new Entities.Administrator()
                {
                    FirstName = "Stoyan",
                    LastName = "Petkov",
                    UserName = "admin",
-                   Password = "pass",
+                   Password = defaultPassword,
                    IsActive = true
                }
                );
@@ -38,7 +42,7 @@ namespace University_System.Migrations
                         FirstName = "Ivan",
                         LastName = "Ivanov",
                         UserName = "teacher",
-                        Password = "pass",
+                        Password = defaultPassword,
                         TitleID = 1,
                         IsActive = true
                     }
@@ -73,7 +77,7 @@ namespace University_System.Migrations
                         FirstName = "Nikolai",
                         LastName = "Nikolov",
                         UserName = "student",
-                        Password = "pass",
+                        Password = defaultPassword,
                         CourseID = 1,
                         IsActive = true,
                         FacultyNumber = 99999999

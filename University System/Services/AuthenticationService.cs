@@ -7,6 +7,7 @@ namespace University_System.Services
     public class AuthenticationService
     {
         public User LoggedUser { get; private set; }
+        private User user = null;
 
         public bool AuthenticateUser(string username, string password, User.UserType userType)
         {
@@ -14,20 +15,23 @@ namespace University_System.Services
             {
                 case User.UserType.Teacher:
                     TeacherRepository teacherRepository = new TeacherRepository();
-                    LoggedUser = teacherRepository.GetAll(filter: u => u.UserName == username && u.Password == password && u.IsActive == true).FirstOrDefault();
+                    user = teacherRepository.GetAll(filter: u => u.UserName == username && u.IsActive == true).FirstOrDefault();
                     break;
                 case User.UserType.Administrator:
                     AdministratorRepository adminRepository = new AdministratorRepository();
-                    LoggedUser = adminRepository.GetAll(filter: u => u.UserName == username && u.Password == password && u.IsActive == true).FirstOrDefault();
+                    user = adminRepository.GetAll(filter: u => u.UserName == username && u.IsActive == true).FirstOrDefault();
                     break;
                 case User.UserType.Student:
                     StudentRepository studentRepository = new StudentRepository();
-                    LoggedUser = studentRepository.GetAll(filter: u => u.UserName == username && u.Password == password && u.IsActive == true).FirstOrDefault();
+                    user = studentRepository.GetAll(filter: u => u.UserName == username && u.IsActive == true).FirstOrDefault();
                     break;
                 default:
                     LoggedUser = null;
                     break;
             }
+            if (SecurityService.ValidatePassword(password, user.Password))
+                LoggedUser = user;
+
             return LoggedUser != null;
         }
     }

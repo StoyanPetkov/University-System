@@ -13,6 +13,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Web.UI;
 using University_System.Models;
+using University_System.Services;
 
 namespace University_System.Controllers
 {
@@ -21,7 +22,6 @@ namespace University_System.Controllers
     {
         public ActionResult Home()
         {
-			string test = "test";
             AdminControllerAdminVM model = new AdminControllerAdminVM();
             StudentRepository studentRepository = new StudentRepository();
             TeacherRepository teacherRepository = new TeacherRepository();
@@ -137,12 +137,11 @@ namespace University_System.Controllers
             if (ModelState.IsValid)
             {
                 Administrator admin = null;
-                admin = adminRepository.GetAll(filter: a => a.UserName == model.UserName).FirstOrDefault();
-                if (admin == null)
+                if (adminRepository.GetAll(filter: a => a.UserName == model.UserName).FirstOrDefault() == null)
                 {
                     admin = new Administrator();
                     admin.UserName = model.UserName;
-                    admin.Password = model.Password;
+                    admin.Password = SecurityService.CreateHash(model.Password);
                     admin.FirstName = model.FirstName;
                     admin.LastName = model.LastName;
                     admin.IsActive = true;
@@ -157,18 +156,31 @@ namespace University_System.Controllers
             return View(model);
         }
 
-        public ActionResult DeleteAdministrator(int id)
+        [HttpPost]
+        public JsonResult GetUserName(int id)
+        {
+            AdministratorRepository adminRepository = new AdministratorRepository();
+            Administrator admin = adminRepository.GetById(id);
+            string name = admin.FirstName + " " + admin.LastName + " ?";
+            return Json(name, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteAdministrator(int id)
         {
             AdministratorRepository adminRepository = new AdministratorRepository();
             if (id == AuthenticationManager.LoggedUser.Id)
             {
-                return RedirectToAction("ManageAdministrators");
+                return Json(false, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 Administrator admin = adminRepository.GetById(id);
-                adminRepository.Delete(admin);
-                return RedirectToAction("ManageAdministrators");
+                if (admin != null)
+                {
+                    adminRepository.Delete(admin);
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
         #endregion
@@ -284,7 +296,7 @@ namespace University_System.Controllers
                         teacher.FirstName = teacherModel.FirstName;
                         teacher.LastName = teacherModel.LastName;
                         teacher.UserName = teacherModel.UserName;
-                        teacher.Password = teacherModel.Password;
+                        teacher.Password = SecurityService.CreateHash(teacherModel.Password);
                         title = titleRepository.GetById(teacherModel.TitleID);
                         teacher.Title = title;
                         teacher.IsActive = teacherModel.isActive;
@@ -439,13 +451,12 @@ namespace University_System.Controllers
                 sb.Insert(0, 0);
             }
             sb.Insert(0, course.Code.ToString());
-            sb.Insert(0, year);
-
-            if (sb.Length == 8)
+            if (course.Code <= 9)
             {
-                faculityNumber = Convert.ToInt32(sb.ToString());
+                sb.Insert(0, 0);
             }
-
+            sb.Insert(0, year);
+            faculityNumber = Convert.ToInt32(sb.ToString());
             return faculityNumber;
         }
 
@@ -479,7 +490,6 @@ namespace University_System.Controllers
             }
             if (id == 0)
             {
-
                 student.FirstName = studentModel.FirstName;
                 student.LastName = studentModel.LastName;
                 student.UserName = studentModel.UserName;
@@ -527,7 +537,7 @@ namespace University_System.Controllers
                     student.FirstName = studentModel.FirstName;
                     student.LastName = studentModel.LastName;
                     student.UserName = studentModel.UserName;
-                    student.Password = studentModel.Password;
+                    student.Password = SecurityService.CreateHash(studentModel.Password);
                     student.IsActive = studentModel.isActive;
                     student.CourseID = studentModel.CourseID;
                     studentRepository.Save(student);
@@ -1079,7 +1089,7 @@ namespace University_System.Controllers
             return Json(isAdded, JsonRequestBehavior.AllowGet);
         }
 
-       [HttpPost]
+        [HttpPost]
         public ActionResult EditSubjectCourse(AdminControllerCourseSubjectVM subjectCourseModel)
         {
             CourseSubject courseSubject = new CourseSubject();

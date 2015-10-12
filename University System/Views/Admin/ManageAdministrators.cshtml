@@ -48,16 +48,26 @@
             <td>
                 @item.IsActive
             </td>
-            <td>
-                @Html.ActionLink("Delete", "DeleteAdministrator", "Admin", new { @id = item.Id }, null) |
-                @if (item.Id == University_System.Models.AuthenticationManager.LoggedUser.Id)
+            <td style="text-align:center;">
+                @if (item.Id != University_System.Models.AuthenticationManager.LoggedUser.Id)
+                {
+            <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn-link" @*style="width:120px;" *@ data-toggle="modal" data-error-info="You can not delete your own account !"
+                            data-confirmation="Are you sure you want to delete: " data-additionalinfo="" data-admin-id=@item.Id data-target="#ModalMessage">
+                        Delete
+                    </button>
+                }
+                else
                 {
                     @Html.ActionLink("Edit", "Edit", "Admin", new { @id = item.Id }, null)
                 }
             </td>
         </tr>
-        }
+    }
 </table>
+<div>
+    @Html.Partial("_ModalMessage")
+</div>
 <table class="table">
     <tr>
         <td>
@@ -65,7 +75,3 @@
         </td>
     </tr>
 </table>
-
-
-
-

@@ -18,7 +18,6 @@ namespace University_System.Controllers
             {
                 return RedirectToAction("Login", "Default");
             }
-			string test = "test";
             List<Article> articleList = new List<Article>();
             ArticleRepository articleRepository = new ArticleRepository();
             Dictionary<int, List<Comment>> comments = new Dictionary<int, List<Comment>>();

@@ -37,7 +37,7 @@
                             }
                         }
                         <button class="commentBtn" data-article="@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Comment</button><hr />
-                        @if (item.Key.TeacherID == University_System.Models.AuthenticationManager.LoggedUser.Id)
+                        @if (University_System.Models.AuthenticationManager.LoggedUser.GetType().Equals(typeof(University_System.Entities.Teacher)) && item.Key.TeacherID == University_System.Models.AuthenticationManager.LoggedUser.Id)
                         {
                             <a href="~/Article/EditArticle?id=@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Edit</a><hr />
                             <a href="~/Article/DeleteArticle?id=@item.Key.Id" style="background-color: Transparent;border: none; cursor:pointer;outline:none;">Delete</a>
